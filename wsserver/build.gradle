@@ -1,0 +1,39 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.1.2'
+    id 'io.spring.dependency-management' version '1.1.2'
+}
+
+group = 'com.example'
+sourceCompatibility = '17'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.security:spring-security-messaging'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    implementation project(':api')
+}
+
+tasks.named("bootRun") {
+    mainClass = 'com.example.server.App'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+
+//    https://mkyong.com/gradle/gradle-how-to-exclude-some-tests/
+    filter {
+
+//        includeTestsMatching "com.example.server.AuthenticatedServerTest"
+//        includeTestsMatching "com.example.server.AuthorizedServerTest"
+        includeTestsMatching "com.example.server.MaxSessionsTest"
+//        includeTestsMatching "com.example.server.UnsecureServerTest"
+    }
+}

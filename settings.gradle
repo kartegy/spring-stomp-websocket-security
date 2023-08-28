@@ -1,0 +1,5 @@
+rootProject.name = 'stomp-websocket-authenticated'
+include 'wsserver'
+include 'wsclient'
+include 'api'
+
