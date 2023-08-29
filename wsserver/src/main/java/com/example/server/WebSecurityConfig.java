@@ -3,6 +3,7 @@ package com.example.server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 
@@ -21,12 +22,21 @@ public class WebSecurityConfig {
         // Authentication
         http.authorizeHttpRequests((authz) -> authz.anyRequest().authenticated())
                 .httpBasic(withDefaults())
-            .sessionManagement((sessions) -> sessions
-                .sessionConcurrency((concurrency) -> concurrency
+
+                // Partially working: second connection rejected but cannot reconnect after logout
+                .sessionManagement((sessions) -> sessions
                         .maximumSessions(1)
                         .maxSessionsPreventsLogin(true)
-                )
-        );
+                );
+
+                // Not working: user can connect any amount of times
+//                .sessionManagement((sessions) -> sessions
+//                        .sessionConcurrency((concurrency) -> concurrency
+//                                .maximumSessions(1)
+//                                .maxSessionsPreventsLogin(true)
+//                        )
+//                );
+
         return http.build();
     }
 
